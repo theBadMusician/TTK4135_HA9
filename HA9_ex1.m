@@ -18,15 +18,15 @@ syms x_1 x_2
 % hess_f = [2, 0; 0, 8];
 
 % Rosenbrock function
-functionname = "modified-rosenbrock-";
-f = @(x_1, x_2) 100*(x_2 - x_1^2)^2 + (1 - x_1)^2;
-grad_f = @(x_1, x_2) [-400*x_2*x_1+400*x_1^3+2*x_1-2; 200*x_2-200*x_1^2];
-hess_f = @(x_1, x_2) [-400*x_2+1200*x_1^2+2, -400*x_1; -400*x_2, 200];
+% functionname = "rosenbrock";
+% f = @(x_1, x_2) 100*(x_2 - x_1^2)^2 + (1 - x_1)^2;
+% grad_f = @(x_1, x_2) [-400*x_2*x_1+400*x_1^3+2*x_1-2; 200*x_2-200*x_1^2];
+% hess_f = @(x_1, x_2) [-400*x_2+1200*x_1^2+2, -400*x_1; -400*x_2, 200];
 
 % Modified Rosenbrock function
-% functionname = "modified-rosenbrock-";
-% f = @(x_1, x_2) 100*(x_2 - x_1^2) + (1 - x_1)^2;
-% grad_f = @(x_1, x_2) [-2*(1-x_1)-200*x_1; 100];
+functionname = "modified-rosenbrock-";
+f = @(x_1, x_2) 100*(x_2 - x_1^2) + (1 - x_1)^2;
+grad_f = @(x_1, x_2) [-2*(1-x_1)-200*x_1; 100];
 
 % fsurf(f)
 
