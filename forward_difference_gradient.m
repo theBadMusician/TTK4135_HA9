@@ -1,4 +1,4 @@
-function [df, perturbation_values, Z] = forward_difference_gradient(f, x0, N, epsilon, do_plot)
+function [df, perturbation_values, Z, current_fig] = forward_difference_gradient(f, x0, N, epsilon, show_plot)
 % Create the range of x values using meshgrid
 perturbation_values = perturbation_array(x0, N, epsilon);
 
@@ -26,7 +26,6 @@ for i = 1:size(x1, 1)
     end
 end
 
-if do_plot == 1
 % Display the result
 figure;
 quiver(x1,x2,dx1,dx2);
@@ -37,6 +36,6 @@ hold off
 xlabel('x_1');
 ylabel('x_2');
 title('Gradient of f');
-end
+current_fig = gcf;
 end
 

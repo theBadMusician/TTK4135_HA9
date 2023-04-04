@@ -9,21 +9,49 @@ close all
 format shortG
 
 [fnc_name, f, grad_f, hess_f] = get_function("modified-rosenbrock");
-fsurf(change_func_handle(f))
+% fsurf(change_func_handle(f))
 
-
-x0 = [0;0];
+% params
+x0 = [0.5;0.5];
 u = 1.1e-16; epsilon_u = sqrt(u);
-epsilon = 1;
-N = 20;
+epsilon = 10;
+N = 10;
 
-grad_fx0 = forward_difference_point_gradient(f, x0, epsilon_u);
+% Gradient at x0
+grad_fx0 = forward_difference_point_gradient(f, x0, epsilon)
+grad_fx0_true = grad_f(x0)
 
-[grad_f_approx, perturbation_points, Z]= forward_difference_gradient(f, x0, N, epsilon, 1);
+% Gradient of f around x0
+[df_est, perturbation_points, Z, fig] = forward_difference_gradient(f, x0, N, epsilon);
 
+% Evaluate gradients of f element-wise with x1 and x2 using a loop
+df_at_points = zeros(size(perturbation_points));
+for i = 1:size(perturbation_points, 1)
+    for j = 1:size(perturbation_points, 2)
+        df_at_points(:,j) = grad_f([perturbation_points(:,j) perturbation_points(:,j)]');
+    end
+end
+
+delta_df = df_est - df_at_points;
+
+% Plot
 figure();
-plot(grad_f_approx(1,:)); hold on
-plot(grad_f_approx(2,:));
-xlabel('Iteration');
+plot(df_est(1,:)); hold on
+plot(df_est(2,:));
+xlabel('offset from x0');
 ylabel('x1, x2');
-title('Obj fun x values')
+title('gradient values')
+df_est_plot = gcf;
+
+% Save data
+data.x0 = x0;
+data.epsilon = epsilon;
+data.N = N;
+data.df_est = df_est;
+data.perturbation_points = perturbation_points;
+
+filename = fnc_name+"-x0="+x0(1)+","+x0(2)+"-epsilon="+epsilon+"-N="+N;
+mkdir("ex3_data/"+filename+"/")
+saveas(fig, "ex3_data/"+filename+"/"+filename+"-gradient"+".png")
+saveas(df_est_plot, "ex3_data/"+filename+"/"+ filename+"-gradient_values"+".png")
+save("ex3_data/"+filename+"/"+ filename + ".mat", "data")
