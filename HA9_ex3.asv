@@ -1,0 +1,19 @@
+% Exercise 9 - Oimization Algorithms
+% Benjaminas Visockis V23
+
+
+%% Problem 3 - Gradient Calculation
+
+%  Symbolic variables x_1 and x_2
+close all
+format shortG
+
+[fnc_name, f, grad_f, hess_f] = get_function("rosenbrock");
+
+x0 = [1;1];
+u = 1.1e-16;
+epsilon_u = sqrt(u);
+
+grad_f_u = forward_difference_point_gradient(f, x0, epsilon_u);
+
+grad_f_approx = forward_difference_gradient(x0, N, epsilon, do_plot);
