@@ -20,13 +20,13 @@ fvals = [];
 x_all = [];
 alphas = [];
 x = x0;
-obj_val = norm(f(x(1), x(2)));
+obj_val = norm(f(x));
 
 H_k = beta*H0;
 
-while norm(grad_f(x(1), x(2))) > epsilon
+while norm(grad_f(x)) > epsilon
     % Compute the descent direction
-    del_f_x = grad_f(x(1), x(2));
+    del_f_x = grad_f(x);
     p_k = -H_k*del_f_x;
 
     % Compute the step size that minimizes the objective function
@@ -35,11 +35,11 @@ while norm(grad_f(x(1), x(2))) > epsilon
 
     % Update x and store the objective function value
     x_new = x + alpha*p_k;
-    obj_val = norm(f(x(1), x(2)));
+    obj_val = norm(f(x));
     
     % Secant
     s_k = x_new - x;
-    y_k = grad_f(x_new(1), x_new(2)) - del_f_x;
+    y_k = grad_f(x_new) - del_f_x;
     
     % Modify H0 (6.20 Nocedal & Wright)
     if i == 0
@@ -49,7 +49,7 @@ while norm(grad_f(x(1), x(2))) > epsilon
     rho_k = (y_k'*s_k)^(-1);
     H_k = (eye(2)-rho_k*s_k*y_k')*H_k*(eye(2)-rho_k*s_k*y_k')+rho_k*s_k*s_k';
 
-    fvals = [fvals, f(x(1), x(2))];
+    fvals = [fvals, f(x)];
     x_all = [x_all, x];
     alphas = [alphas, alpha];
     

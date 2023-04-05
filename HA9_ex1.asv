@@ -10,11 +10,27 @@ clear
 syms x_1 x_2
 
 % Define the objective function and its gradient
-[fnc_name, f, grad_f, hess_f] = get_function("rosenbrock");
-functionname = fnc_name+"-";
-% fsurf(change_func_handle(f));
 
-%% a, b, c
+% Custom
+% functionname = "custom-f-";
+% f = @(x_1, x_2) (x_1^2 + 4*x_2^2 - 4*x_1 - 8*x_2 + 13);
+% grad_f = @(x_1, x_2) [2*x_1 - 4; 8*x_2 - 8];
+% hess_f = [2, 0; 0, 8];
+
+% Rosenbrock function
+% functionname = "rosenbrock";
+% f = @(x_1, x_2) 100*(x_2 - x_1^2)^2 + (1 - x_1)^2;
+% grad_f = @(x_1, x_2) [-400*x_2*x_1+400*x_1^3+2*x_1-2; 200*x_2-200*x_1^2];
+% hess_f = @(x_1, x_2) [-400*x_2+1200*x_1^2+2, -400*x_1; -400*x_2, 200];
+
+% Modified Rosenbrock function
+functionname = "modified-rosenbrock-";
+f = @(x_1, x_2) 100*(x_2 - x_1^2) + (1 - x_1)^2;
+grad_f = @(x_1, x_2) [-2*(1-x_1)-200*x_1; 100];
+
+% fsurf(f)
+
+%% a
 % Program the steepest descent and Newton algorithms using the backtracking line
 % search, Algorithm 3.1. Use them to minimize the Rosenbrock function (2.22). Set the initial
 % step length α0=1 and print the step length used by each method at each iteration. First try
@@ -26,38 +42,35 @@ x0 = [1.2;1.2];
 % x0 = [-1.2;1];
 epsilon = 1e-6;
 
-rho = 0.1;
-c = 10e-4;
-
-% Steepest descent
-rho_sd = rho;
-c_sd = c;
-[fvals_sd, x_all_sd, alphas_sd] = steepest_descent(f, grad_f, x0, epsilon, rho_sd, c_sd);
-iter_sd = length(alphas_sd)
-data_sd = ["x0_1","x0_2","rho","c","n_iters";x0(1),x0(2),rho_sd,c_sd,iter_sd];
-
-foldername = "ex1_data/"+functionname+"SD/";
-filename = "sd_x0="+x0(1)+","+x0(2)+"_rho=" + rho_sd + "_c=" + c_sd;
-mkdir(foldername+filename);
-save(foldername+filename+"/"+filename + ".mat", "data_sd")
-save_plot(fvals_sd, x_all_sd, alphas_sd, foldername+filename+"/"+filename, data_sd);
-
-% Newton Method
-rho_nm = rho;
-c_nm = c;
-[fvals_nm, x_all_nm, alphas_nm] = newton_method(f, grad_f, hess_f, x0, epsilon, rho_nm, c_nm);
-iter_nm = length(alphas_nm)
-data_nm = ["x0_1","x0_2","rho","c","n_iters";x0(1),x0(2),rho_nm,c_nm,iter_nm];
-
-foldername = "ex1_data/"+functionname+"NM/";
-filename = "nm_x0="+x0(1)+","+x0(2)+"_rho=" + rho_nm + "_c=" + c_nm;
-mkdir(foldername+filename);
-save(foldername+filename+"/"+filename + ".mat", "data_nm")
-save_plot(fvals_nm, x_all_nm, alphas_nm, foldername+filename+"/"+filename, data_nm);
+%% Steepest descent
+% rho_sd = 0.1;
+% c_sd = 0.1;
+% [fvals_sd, x_all_sd, alphas_sd] = steepest_descent(f, grad_f, x0, epsilon, rho_sd, c_sd);
+% iter_sd = length(alphas_sd);
+% data_sd = ["x0_1","x0_2","rho","c","n_iters";x0(1),x0(2),rho_sd,c_sd,iter_sd];
+% 
+% foldername = "ex1_data/"+functionname+"SD/";
+% filename = "sd_x0="+x0(1)+","+x0(2)+"_rho=" + rho_sd + "_c=" + c_sd;
+% mkdir(foldername+filename);
+% save("NM/"+filename+"/"+filename + ".mat", "data_nm")
+% save_plot(fvals_nm, x_all_nm, alphas_nm, foldername+filename+"/"+filename, data_sd);
+% 
+% % Newton Method
+% rho_nm = 0.0001;
+% c_nm = 0.1;
+% [fvals_nm, x_all_nm, alphas_nm] = newton_method(f, grad_f, hess_f, x0, epsilon, rho_nm, c_nm);
+% iter_nm = length(alphas_nm);
+% data_nm = ["x0_1","x0_2","rho","c","n_iters";x0(1),x0(2),rho_nm,c_nm,iter_nm];
+% 
+% foldername = "ex1_data/"+functionname+"NM/";
+% filename = "nm_x0="+x0(1)+","+x0(2)+"_rho=" + rho_bfgs + "_c=" + c_bfgs;
+% mkdir(foldername+filename);
+% save("NM/"+filename+"/"+filename + ".mat", "data_nm")
+% save_plot(fvals_nm, x_all_nm, alphas_nm, foldername+filename+"/"+filename, data_sd);
 
 %% BFGS Method
-rho_bfgs = rho;
-c_bfgs = c;
+rho_bfgs = 0.01;
+c_bfgs = 10e-4;
 
 beta = 1;
 H0 = eye(2);
@@ -73,8 +86,8 @@ save(foldername+filename+"/"+filename + ".mat", "data_bfgs")
 save_plot(fvals_bfgs, x_all_bfgs, alphas_bfgs, foldername+filename+"/"+filename, data_bfgs);
 
 %% BFGS Method  w/ modified H0
-rho_modH0_bfgs = rho;
-c_modH0_bfgs = c;
+rho_modH0_bfgs = 0.01;
+c_modH0_bfgs = 10e-4;
 
 beta = 1;
 H0 = eye(2);

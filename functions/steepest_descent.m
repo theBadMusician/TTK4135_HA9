@@ -1,10 +1,11 @@
-% Newton Minimization Method
-function [fvals, x_all, alphas] = newton_method(f, grad_f, hess_f, x0, epsilon, rho, c)
+% Steepest Descent
+function [fvals, x_all, alphas] = steepest_descent(f, grad_f, x0, epsilon, rho, c)
+% Performs the steepest descent algorithm by iteratively minimizing 
+% a function by moving in the direction of steepest descent at each step.
 %
 % Inputs:
 % - f: symbolic function to be minimized (2-dimensional only)
 % - grad_f: symbolic gradient of f
-% - hess_f: symbolic hessian of f
 % - x0: initial point for the optimization
 % - epsilon: gradient tolerance for the minimization
 % 
@@ -17,24 +18,23 @@ function [fvals, x_all, alphas] = newton_method(f, grad_f, hess_f, x0, epsilon, 
 fvals = [];
 x_all = [];
 alphas = [];
-x = x0;
-obj_val = norm(f(x(1), x(2)));
 
-while norm(grad_f(x(1), x(2))) > epsilon
-    % Compute the Newton direction
-    hessian_k = hess_f(x(1), x(2));
-    p_k = -inv(hessian_k)*grad_f(x(1), x(2));
-    % p_k = -inv(hess_f)*grad_f(x(1), x(2));
+x = x0;
+obj_val = norm(f(x));
+
+while norm(grad_f(x)) > epsilon
+    % Compute the steepest descent direction
+    p_k = -grad_f(x);
 
     % Compute the step size that minimizes the objective function
     % alpha = 0.001; %constant
     alpha = backtracking_line_search(obj_val, x, p_k, f, grad_f, rho, c);
-
+    
     % Update x and store the objective function value
     x = x + alpha*p_k;
-    obj_val = norm(f(x(1), x(2)));
+    obj_val = norm(f(x));
 
-    fvals = [fvals, f(x(1), x(2))];
+    fvals = [fvals, f(x)];
     x_all = [x_all, x];
     alphas = [alphas, alpha];
 end

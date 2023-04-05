@@ -7,8 +7,8 @@
 % b, c
 % x0 = [2;-2]; % initial point
 % x0 = [1.2;1.2];
-% x0 = [-1.2;1];
-x0 = [0;-2];
+x0 = [-1.2;1];
+x0 = [-12;10];
 
 % Algorithm options
 funtol = 1e-5; % Tolerence for difference in function values at simplex points - "flatness"
