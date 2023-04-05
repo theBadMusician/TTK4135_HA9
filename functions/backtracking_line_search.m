@@ -22,7 +22,7 @@ obj_val_new = obj_val;
 wolfe_cond = norm([0;0]);
 while obj_val_new >= wolfe_cond  % 1st Wolfe condition
     x_k_new = x_k + alpha * p_k;
-    obj_val_new = norm(f(x_k_new));  % evaluate objective function at new point
+    obj_val_new = norm(f(x_k_new)); % evaluate objective function at new point
     wolfe_cond = obj_val + c * alpha * grad_f(x_k)' * p_k;
     alpha = rho * alpha;
 end

@@ -18,9 +18,9 @@ hess_f = @(x) [-400*x(2)+1200*x(1)^2+2, -400*x(1); -400*x(2), 200];
 case 'modified-rosenbrock'
 % Modified Rosenbrock function
 fnc_name = "modified-rosenbrock";
-f = @(x) 100*(x(2) - x(1)^2) + (1 - x(1))^2;
-grad_f = @(x) [-2*(1-x(1))-200*x(1); 100];
-hess_f = @(x) [-198,0;0,0];
+f =      @(x) 100*(x(2) - x(1))^2 + (1 - x(1))^2;
+grad_f = @(x) [-202*x(1)-200*x(2)-2; 200*(x(2)-x(1))];
+hess_f = @(x) [202,-200;-200,200];
 
 case 'quadratic'
 fnc_name = "quadratic";

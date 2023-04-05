@@ -12,14 +12,16 @@ format shortG
 % fsurf(change_func_handle(f))
 
 % params
-x0 = [-1.2;1];
+x0 = [0.5;0.5];
 u = 1.1e-16; epsilon_u = sqrt(u);
-epsilon = 0.1;
-N = 20;
+epsilon = epsilon_u;
+N = 200;
 
 % Gradient at x0
-grad_fx0 = forward_difference_point_gradient(f, x0, epsilon)
 grad_fx0_true = grad_f(x0)
+grad_fx0 = forward_difference_point_gradient(f, x0, epsilon)
+delta_df = grad_fx0_true - grad_fx0
+
 
 % Gradient of f around x0
 [df_est, perturbation_points, Z, fig] = forward_difference_gradient(f, x0, N, epsilon);
@@ -31,9 +33,6 @@ for i = 1:size(perturbation_points, 1)
         df_at_points(:,j) = grad_f([perturbation_points(:,j) perturbation_points(:,j)]');
     end
 end
-
-delta_df = df_at_points - df_est;
-delta_df(1,1)
 
 % Create the range of x values using meshgrid
 [x1, x2] = meshgrid(perturbation_points(1, :), perturbation_points(2, :));
@@ -50,17 +49,17 @@ xlabel('x_1');
 ylabel('x_2');
 title('True gradient of f');
 true_df_fig = gcf;
-saveas(true_df_fig, "ex3_data/"+filename+"/"+filename+"-true-gradient"+".png")
 
-
-% % Plot
-% figure();
-% plot(df_est(1,:)); hold on
-% plot(df_est(2,:));
-% xlabel('offset from x0');
-% ylabel('x1, x2');
-% title('gradient values')
-% df_est_plot = gcf;
+% Plot
+figure();
+plot(df_est(1,:)); hold on
+plot(df_est(2,:)); hold on
+plot(df_at_points(1,:), "o--"); hold on
+plot(df_at_points(2,:), "o--");
+xlabel('offset from x0');
+ylabel('x1, x2');
+title('gradient values')
+df_est_plot = gcf;
 
 
 % Save data
@@ -72,6 +71,7 @@ data.perturbation_points = perturbation_points;
 
 filename = fnc_name+"-x0="+x0(1)+","+x0(2)+"-epsilon="+epsilon+"-N="+N;
 mkdir("ex3_data/"+filename+"/")
+saveas(true_df_fig, "ex3_data/"+filename+"/"+filename+"-true-gradient"+".png")
 saveas(fig, "ex3_data/"+filename+"/"+filename+"-gradient"+".png")
-% saveas(df_est_plot, "ex3_data/"+filename+"/"+ filename+"-gradient_values"+".png")
+saveas(df_est_plot, "ex3_data/"+filename+"/"+ filename+"-gradient_values"+".png")
 save("ex3_data/"+filename+"/"+ filename + ".mat", "data")

@@ -6,8 +6,7 @@
 
 %  Symbolic variables x_1 and x_2
 close all
-clear
-syms x_1 x_2
+
 
 % Define the objective function and its gradient
 [fnc_name, f, grad_f, hess_f] = get_function("rosenbrock");
@@ -26,12 +25,12 @@ x0 = [1.2;1.2];
 % x0 = [-1.2;1];
 epsilon = 1e-6;
 
-rho = 0.1;
-c = 10e-4;
+% rho = 0.01;
+% c = 0.0001;
 
-% Steepest descent
-rho_sd = rho;
-c_sd = c;
+%% Steepest descent
+rho_sd = 0.5;
+c_sd = 0.3;
 [fvals_sd, x_all_sd, alphas_sd] = steepest_descent(f, grad_f, x0, epsilon, rho_sd, c_sd);
 iter_sd = length(alphas_sd)
 data_sd = ["x0_1","x0_2","rho","c","n_iters";x0(1),x0(2),rho_sd,c_sd,iter_sd];
@@ -42,9 +41,9 @@ mkdir(foldername+filename);
 save(foldername+filename+"/"+filename + ".mat", "data_sd")
 save_plot(fvals_sd, x_all_sd, alphas_sd, foldername+filename+"/"+filename, data_sd);
 
-% Newton Method
-rho_nm = rho;
-c_nm = c;
+%% Newton Method
+rho_nm = 0.01;
+c_nm = 0.01;
 [fvals_nm, x_all_nm, alphas_nm] = newton_method(f, grad_f, hess_f, x0, epsilon, rho_nm, c_nm);
 iter_nm = length(alphas_nm)
 data_nm = ["x0_1","x0_2","rho","c","n_iters";x0(1),x0(2),rho_nm,c_nm,iter_nm];
@@ -56,8 +55,8 @@ save(foldername+filename+"/"+filename + ".mat", "data_nm")
 save_plot(fvals_nm, x_all_nm, alphas_nm, foldername+filename+"/"+filename, data_nm);
 
 %% BFGS Method
-rho_bfgs = rho;
-c_bfgs = c;
+rho_bfgs = 0.3;
+c_bfgs = 10e-4;
 
 beta = 1;
 H0 = eye(2);
@@ -73,8 +72,8 @@ save(foldername+filename+"/"+filename + ".mat", "data_bfgs")
 save_plot(fvals_bfgs, x_all_bfgs, alphas_bfgs, foldername+filename+"/"+filename, data_bfgs);
 
 %% BFGS Method  w/ modified H0
-rho_modH0_bfgs = rho;
-c_modH0_bfgs = c;
+rho_modH0_bfgs = 0.1;
+c_modH0_bfgs = 0.01;
 
 beta = 1;
 H0 = eye(2);
